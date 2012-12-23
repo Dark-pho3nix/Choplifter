@@ -4,6 +4,8 @@
 	<stdio.h>
 	<SDL/SDL.h>
 
+1356202402 >
+
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
@@ -22,6 +24,8 @@
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1199055974 e.h"
 
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl_main.h
 	"SDL_stdinc.h"
@@ -59,6 +63,8 @@
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl_config.h
 	"SDL_platform.h"
 	<stdarg.h>
+
+1199055974 
 
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl_platform.h
 
@@ -167,6 +173,8 @@
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
+1199055974 .h"
+
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
@@ -183,9 +191,18 @@
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
+<<<<<<< HEAD
 
 1356250866 source:c:\users\jerome\documents\github\choplifter\choplifter_sdl\main.c
 	<stdlib.h>
 	<stdio.h>
 	<SDL/SDL.h>
 
+=======
+
+1356213181 source:/Volumes/Donnees/Jerome/Supinfo/B1/Projects/C/Choplifter/Choplifter_SDL/main.c
+	<stdlib.h>
+	<stdio.h>
+	<SDL/SDL.h>
+
+>>>>>>> New commit
