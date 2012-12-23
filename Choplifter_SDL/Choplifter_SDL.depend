@@ -184,3 +184,8 @@
 	"begin_code.h"
 	"close_code.h"
 
+1356250866 source:c:\users\jerome\documents\github\choplifter\choplifter_sdl\main.c
+	<stdlib.h>
+	<stdio.h>
+	<SDL/SDL.h>
+
