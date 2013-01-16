@@ -49,16 +49,19 @@ Utiliser la SDL : licence GNU, pre-installée dans Code:blocks par SUPINFO, bien
 	- creation de la fenetre de jeu principale (graphique uniquement)
 	
 
-4. Semaine du 18/02, 25/02, 4/03, 11/03 et 18/03 :
+4. Semaine du 18/02, 25/02, 4/03 et 11/03 :
 	- Gestion des contrôles du jeu (gestion entrées clavier)
 	- Gestion du scrolling de la carte
+
+5. Semaine du 18/03 et 25/03 :
+	- Gestion des ennemis	
 	
-	
-5. Semaine du 25/03, 1/04 et 8/04 :
+6. Semaine du 1/04 et 8/04 :
 	- Gestion des collisions joueurs-environnement et joueurs-ennemis
+	- Creations d'images ou telechargement d'images libres
 	- Utilisation de nos propres images ou d'images libres pour la version finale du jeu
 
-6. Semaine du 15/04 et 22/04
+7. Semaine du 15/04, 22/04
 	- Ajout de sons, musiques
 	- Recherche et eilimination de bugs
 	- Finalisation.
