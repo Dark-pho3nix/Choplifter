@@ -29,20 +29,37 @@ Utiliser la SDL : licence GNU, pre-installée dans Code:blocks par SUPINFO, bien
 
 ##Echelle de Temps
 
-__Semaine du 14/01 = Semaine 01__  
 
-1. Semaine 01 : 	
+1. Semaine du 14/01 : 	
 	- etablissement du planning 
 	- prise de conscience du travail demandé
 	- repartition des roles
-	- verification de la possibilité de faire un site (promotionnel) pour le jeu  
+	- verification de la possibilité de faire un site (promotionnel) pour le jeu    
+	
     
-2. Semaine 02 :
+2. Semaine du 21/01 :
 	- Etablissement des regles du jeu  
 	- Creation d'un depot privé sur le site Github.com pour la gestion des codes du projet  
 	- Ebauche voire creation de la page d'accueil (menu de Jeu) par Alexandre et Jerome
-	- si accord, debut du site par Charly  
+	- Debut de l'apprentissage de la SDL
+	
   
-3. Semaine 03 et 04, 05:
-	- avancé du site
+3. Semaine du 28/01, 4/02 et 11/02 :
 	- inclusions d'images temporaires et non-definitives dans le projet pour creer la fenetre de jeu
+	- creation de la fenetre de jeu principale (graphique uniquement)
+	
+
+4. Semaine du 18/02, 25/02, 4/03, 11/03 et 18/03 :
+	- Gestion des contrôles du jeu (gestion entrées clavier)
+	- Gestion du scrolling de la carte
+	
+	
+5. Semaine du 25/03, 1/04 et 8/04 :
+	- Gestion des collisions joueurs-environnement et joueurs-ennemis
+	- Utilisation de nos propres images ou d'images libres pour la version finale du jeu
+
+6. Semaine du 15/04 et 22/04
+	- Ajout de sons, musiques
+	- Recherche et eilimination de bugs
+	- Finalisation.
+	
