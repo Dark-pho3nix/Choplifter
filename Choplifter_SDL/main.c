@@ -1,35 +1,43 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include "SDL_image.h"
-
-#include "menu.h"
+#include <windows.h>
+#include "SDL_image.h" /* Inclusion du header de SDL_image (adapter le dossier au besoin) */
 
 void pause();
 
 int main(int argc, char *argv[])
 {
-    SDL_Init(SDL_INIT_EVERYTHING); // Appel de la SDL (via SDL/SDL.h)
-    if (SDL_Init(SDL_INIT_EVERYTHING)==-1)//SDL_INIT_EVERYTHING renvoi 0 si tout s'est bien passe et -1 sinon. On teste dans ce if si il y a une erreur a l'initialisation.
-    {
-        printf("Erreur a l'initialisation de la SDL !");
-        exit; // Si erreur : on quitte;
-    }
-    SDL_SetVideoMode(1280, 800, 32, SDL_HWSURFACE | SDL_DOUBLEBUF); // Ouverture de la fenêtre de 800 par 400 avec gestion des images par la memoire video (HWSURFACE). DOUBLEBUF permet de faire un design fluide et non-scintillant
-    SDL_WM_SetCaption("CHOPLIFTER", "Choplifter"); // Titre de la fenetre puis titre de l'icone.
+    SDL_Surface *ecran = NULL, *back = NULL;
+    SDL_Rect positionback;
 
-    SDL_Surface *backg = NULL;
-    backg=IMG_Load("backg.png");
+    positionback.x = 0;
+    positionback.y = 0;
 
-    pause(); // Mise en pause du programme
+    SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Quit(); // Arrêt de la SDL
-    return EXIT_SUCCESS; // Fermeture du programme
+    SDL_WM_SetIcon(IMG_Load("sdl_icone.bmp"), NULL);
 
+    ecran = SDL_SetVideoMode(1280, 800, 32, SDL_HWSURFACE);
+    SDL_WM_SetCaption("Chargement d'images en SDL", NULL);
 
+    back = IMG_Load("images/back.png");
+    SDL_BlitSurface(back, NULL, ecran, &positionback);
+
+    /* Chargement d'un PNG avec IMG_Load
+    Celui-ci est automatiquement rendu transparent car les informations de
+    transparence sont codées à l'intérieur du fichier PNG */
+
+    SDL_Flip(ecran);
+    pause();
+
+    SDL_FreeSurface(back);
+    SDL_Quit();
+
+    return EXIT_SUCCESS;
 }
 
-void pause() // Fonction du SdZ, a changer plus tard.
+void pause()
 {
     int continuer = 1;
     SDL_Event event;
