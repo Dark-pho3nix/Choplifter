@@ -1,3 +1,7 @@
+############NE SYNCHRONISER LE .CBP QU'UNE SEULE FOIS POUR TOUTE !
+
+
+
 Choplifter
 ==========
 
