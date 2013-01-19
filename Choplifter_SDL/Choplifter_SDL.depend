@@ -4,7 +4,7 @@
 	<stdio.h>
 	<SDL/SDL.h>
 
-1356202402 >
+1356250866 >
 
 1199055974 e:\apps\codeblocks\sdl\include\sdl\sdl.h
 	"SDL_main.h"
@@ -191,18 +191,28 @@
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
-<<<<<<< HEAD
 
-1356250866 source:c:\users\jerome\documents\github\choplifter\choplifter_sdl\main.c
+1199055974 D
+
+1358616518 source:c:\users\jerome\documents\github\choplifter\choplifter_sdl\main.c
 	<stdlib.h>
 	<stdio.h>
 	<SDL/SDL.h>
-
-=======
+	"SDL_image.h"
+	"menu.h"
 
 1356213181 source:/Volumes/Donnees/Jerome/Supinfo/B1/Projects/C/Choplifter/Choplifter_SDL/main.c
 	<stdlib.h>
 	<stdio.h>
 	<SDL/SDL.h>
 
->>>>>>> New commit
+1356213181 commit
+
+1358616165 c:\users\jerome\documents\github\choplifter\choplifter_sdl\sdl_image.h
+	"SDL/SDL.h"
+	"SDL/SDL_version.h"
+	"SDL/begin_code.h"
+	"SDL/close_code.h"
+
+1358604594 c:\users\jerome\documents\github\choplifter\choplifter_sdl\menu.h
+
