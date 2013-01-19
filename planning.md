@@ -24,7 +24,7 @@ __Jerome__ : le jeu en lui meme… Il le chef de projet car il a pris l'initiati
 Utiliser la SDL : licence GNU, pre-installée dans Code:blocks par SUPINFO, bien documentée, stable, bonne communauté notamment francophone, et elle est adapté a notre projet  
 
 
-  
+ 
 ----------------------------------------------
 
 ##Echelle de Temps
