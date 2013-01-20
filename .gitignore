@@ -4,14 +4,17 @@
 # Libraries
 *.lib
 *.a
+*.cbp
 
 # Shared objects (inc. Windows DLLs)
 *.so
 *.so.*
 *.dylib
+*.cbp
 
 # Executables
 *.out
+*.cbp
 
 # Project Files
 *.cbp
