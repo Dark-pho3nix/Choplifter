@@ -379,3 +379,9 @@
 	<windows.h>
 	"SDL_image.h"
 
+1358935361 source:c:\users\d4rk-pho3nix\documents\github\choplifter\choplifter_sdl\main.c
+	<stdlib.h>
+	<stdio.h>
+	<SDL/SDL.h>
+	"SDL_image.h"
+

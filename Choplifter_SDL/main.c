@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     /*
     Celui-ci est automatiquement rendu transparent car les informations de
     transparence sont codées à l'intérieur du fichier PNG */
+    //COUCOU
 
     SDL_Flip(ecran);
     pause();
