@@ -2,13 +2,16 @@
 #include <stdio.h>
 #include <SDL/SDL.h>
 #include "SDL_image.h" // Inclusion du header pour la SDL
+#include "niveau1.h" // Inclusion du header pour le niveau 1
 
-void pause(); // Appel de la fonction pause du SdZ temporairement
+void pause(); // Appel de la fonction pause
 
 int main(int argc, char *argv[])
 {
     SDL_Surface *fenetre = NULL, *back = NULL;//Initialisation des images et elements avec des pointeurs
-    SDL_Rect positionback;// Emplacemet de l'image du background
+    SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
+
+    FILE *fichier = NULL;
 
     positionback.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche)
     positionback.y = 0;
@@ -28,6 +31,21 @@ int main(int argc, char *argv[])
 
     SDL_Flip(fenetre);
     pause();
+
+
+
+
+
+    fichier = fopen("verif.txt", "a+");
+    if (fichier !=NULL)
+    {
+        fprintf(fichier, "Main passe !\n");
+    }
+    fclose(fichier);
+    initialiser_coordonnees();
+    ajout_valeurs_sprites();
+    ajouter_sol();
+
 
     SDL_FreeSurface(back);
     SDL_Quit();
