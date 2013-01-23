@@ -30,7 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="D:\Logiciels école\CodeBlocks\SDL\include" />
+			<Add directory="..\..\..\..\..\..\Program Files (x86)\CodeBlocks\SDL\include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -40,8 +40,8 @@
 			<Add library="gdi32" />
 			<Add library="winmm" />
 			<Add library="dxguid" />
-			<Add library="..\..\Logiciels école\CodeBlocks\SDL\lib\SDL_image.lib" />
-			<Add directory="D:\Logiciels école\CodeBlocks\SDL\lib" />
+			<Add library="..\..\..\..\..\..\Program Files (x86)\CodeBlocks\SDL\lib\SDL_image.lib" />
+			<Add directory="..\..\..\..\..\..\Program Files (x86)\CodeBlocks\SDL\lib" />
 		</Linker>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
