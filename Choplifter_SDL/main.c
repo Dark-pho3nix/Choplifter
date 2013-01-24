@@ -4,9 +4,19 @@
 #include "SDL_image.h" // Inclusion du header pour la SDL
 #include "global.h" // Inclusion du fichier contenant les fonction globales, generales
 
+
+
+#define LARGEUR_TILE 64  // hauteur et largeur des tiles.
+#define HAUTEUR_TILE 64
+#define LARGEUR_FENETRE 60  // nombre a afficher en x et y
+#define HAUTEUR_FENETRE 12
+
+
+
 int main(int argc, char *argv[])
 {
     SDL_Surface *fenetre = NULL, *back = NULL;//Initialisation des images et elements avec des pointeurs
+    SDL_Surface *sable = NULL;
     SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
 
     FILE *erreur = NULL;
@@ -33,11 +43,47 @@ int main(int argc, char *argv[])
     SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
     SDL_Flip(fenetre);
 
+
+    char *carte[]={ // Pour afficher tel ou tel tile en fonction du numero
+    "000000000000000000000000000000000000000000000000000000000000", // 0 affiche le sable pour le sol
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "000000000000000000000000000000000000000000000000000000000000",
+    "111111111111111111111111111111111111111111111111111111111111"
+    };
+
+    sable = IMG_Load("images/tileset/1.png");
+    sable = IMG_Load("images/tileset/1.png");
+    int i,j;
+    SDL_Rect Rect_dest;
+    SDL_Rect Rect_source;
+    Rect_source.w = LARGEUR_TILE;
+    Rect_source.h = HAUTEUR_TILE;
+    for(i=0;i<LARGEUR_FENETRE;i++)
+    {
+        for(j=0;j<HAUTEUR_FENETRE;j++)
+        {
+            Rect_dest.x = i*LARGEUR_TILE;
+            Rect_dest.y = j*HAUTEUR_TILE;
+            Rect_source.x = (carte[j][i]-'1')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(sable,&Rect_source,fenetre,&Rect_dest);
+        }
+    }
+    SDL_Flip(fenetre);
+
+
+
     pause();
 
     SDL_FreeSurface(back);
     SDL_Quit();
     return EXIT_SUCCESS;
 }
-
-
