@@ -43,9 +43,10 @@ void ajouter_sol() // Fonction pour afficher l'image en fonction de la valeurs d
     for (i=0; i<60; i++)
     {
         sable = IMG_Load("images/tileset/1.png"); // Y ajouter alors l'image 1.png : le sable pour le sol
-        //  SDL_BlitSurface(sable, NULL, fenetre, &coordonnees[i][12]); // Indique ou sera affichée l'image
+        SDL_BlitSurface(sable, NULL, fenetre, &coordonnees[i][12]); // Indique ou sera affichée l'image
         SDL_Flip(sable);
     }
+
     fichier = fopen("verif.txt", "a+");
     if (fichier !=NULL)
     {

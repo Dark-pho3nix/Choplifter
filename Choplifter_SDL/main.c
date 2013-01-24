@@ -3,8 +3,7 @@
 #include <SDL/SDL.h>
 #include "SDL_image.h" // Inclusion du header pour la SDL
 #include "niveau1.h" // Inclusion du header pour le niveau 1
-
-void pause(); // Appel de la fonction pause
+#include "global.h" // Inclusion du fichier contenant les fonction globales, generales
 
 int main(int argc, char *argv[])
 {
@@ -32,16 +31,13 @@ int main(int argc, char *argv[])
     SDL_Flip(fenetre);
     pause();
 
-
-
-
-
     fichier = fopen("verif.txt", "a+");
     if (fichier !=NULL)
     {
         fprintf(fichier, "Main passe !\n");
     }
     fclose(fichier);
+
     initialiser_coordonnees();
     ajout_valeurs_sprites();
     ajouter_sol();
@@ -52,20 +48,4 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-void pause()
-{
-    int continuer = 1; // On initialise la variable 'continuer' a 1 (booleen pour continuer)
-    SDL_Event quitter; // On cree une variable de type SDL_Event
 
-    while (continuer==1)
-    {
-        SDL_WaitEvent(&quitter);
-        if (quitter.type==SDL_KEYDOWN)                  //
-        {                                               //
-            if (quitter.key.keysym.sym==SDLK_ESCAPE)    //
-            {                                           // On test si il y a un appui sur la touche 'echap', si c'est vrai on met la variable a 0 et
-                continuer=0;                            // le jeu quitte.
-            }                                           //
-        }
-    }
-}
