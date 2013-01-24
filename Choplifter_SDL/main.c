@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
 {
     SDL_Surface *fenetre = NULL, *back = NULL;//Initialisation des images et elements avec des pointeurs
     SDL_Surface *sable = NULL;
+    SDL_Surface *immeuble_bas_gauche = NULL, *immeuble_bas_droite = NULL, *immeuble_milieu_bas_gauche = NULL, *immeuble_milieu_bas_droite = NULL, *immeuble_milieu_haut_gauche = NULL, *immeuble_milieu_haut_droite = NULL, *immeuble_haut_gauche = NULL, *immeuble_haut_droite = NULL;
     SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
-
     FILE *erreur = NULL;
 
     positionback.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche)
@@ -45,22 +45,30 @@ int main(int argc, char *argv[])
 
 
     char *carte[]={ // Pour afficher tel ou tel tile en fonction du numero
-    "000000000000000000000000000000000000000000000000000000000000", // 0 affiche le sable pour le sol
+    "000000000000000000000000000000000000000000000000000000000000", // 1 affiche le sable pour le sol
+    "000000000000000000000000000000000000000000000000000000000000", // 0 n'affiche rien
     "000000000000000000000000000000000000000000000000000000000000",
     "000000000000000000000000000000000000000000000000000000000000",
     "000000000000000000000000000000000000000000000000000000000000",
     "000000000000000000000000000000000000000000000000000000000000",
     "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
+    "089000000000000000000000000000000000000000000000000000000000",
+    "067000000000000000000000000000000000000000000000000000000000",
+    "045000000000000000000000000000000000000000000000000000000000",
+    "023000000000000000000000000000000000000000000000000000000000",
     "111111111111111111111111111111111111111111111111111111111111"
     };
 
     sable = IMG_Load("images/tileset/1.png");
-    sable = IMG_Load("images/tileset/1.png");
+    immeuble_bas_gauche = IMG_Load("images/tileset/2.png");
+    immeuble_bas_droite = IMG_Load("images/tileset/3.png");
+    immeuble_milieu_bas_gauche = IMG_Load("images/tileset/4.png");
+    immeuble_milieu_bas_droite = IMG_Load("images/tileset/5.png");
+    immeuble_milieu_haut_gauche = IMG_Load("images/tileset/6.png");
+    immeuble_milieu_haut_droite = IMG_Load("images/tileset/7.png");
+    immeuble_haut_gauche = IMG_Load("images/tileset/8.png");
+    immeuble_haut_droite = IMG_Load("images/tileset/9.png");
+
     int i,j;
     SDL_Rect Rect_dest;
     SDL_Rect Rect_source;
@@ -75,10 +83,33 @@ int main(int argc, char *argv[])
             Rect_source.x = (carte[j][i]-'1')*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(sable,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'2')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_bas_gauche,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'3')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_bas_droite,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'4')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_milieu_bas_gauche,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'5')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_milieu_bas_droite,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'6')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_milieu_haut_gauche,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'7')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_milieu_haut_droite,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'8')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_haut_gauche,&Rect_source,fenetre,&Rect_dest);
+            Rect_source.x = (carte[j][i]-'9')*LARGEUR_TILE;
+            Rect_source.y = 0;
+            SDL_BlitSurface(immeuble_haut_droite,&Rect_source,fenetre,&Rect_dest);
         }
     }
     SDL_Flip(fenetre);
-
 
 
     pause();
