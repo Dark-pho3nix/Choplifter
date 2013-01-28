@@ -8,7 +8,7 @@
 
 #define LARGEUR_TILE 64  // hauteur et largeur des tiles.
 #define HAUTEUR_TILE 64
-#define LARGEUR_FENETRE 60  // nombre a afficher en x et y
+#define LARGEUR_FENETRE 20  // nombre a afficher en x et y
 #define HAUTEUR_FENETRE 12
 
 
@@ -43,22 +43,6 @@ int main(int argc, char *argv[])
     SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
     SDL_Flip(fenetre);
 
-
-    char *carte[]={ // Pour afficher tel ou tel tile en fonction du numero
-    "000000000000000000000000000000000000000000000000000000000000", // 1 affiche le sable pour le sol
-    "000000000000000000000000000000000000000000000000000000000000", // 0 n'affiche rien
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "000000000000000000000000000000000000000000000000000000000000",
-    "089000000000000000000000000000000000000000000000000000000000",
-    "067000000000000000000000000000000000000000000000000000000000",
-    "045000000000000000000000000000000000000000000000000000000000",
-    "023000000000000000000000000000000000000000000000000000000000",
-    "111111111111111111111111111111111111111111111111111111111111"
-    };
-
     sable = IMG_Load("images/tileset/1.png");
     immeuble_bas_gauche = IMG_Load("images/tileset/2.png");
     immeuble_bas_droite = IMG_Load("images/tileset/3.png");
@@ -70,41 +54,52 @@ int main(int argc, char *argv[])
     immeuble_haut_droite = IMG_Load("images/tileset/9.png");
 
     int i,j;
+    int carte[HAUTEUR_FENETRE][LARGEUR_FENETRE];
+    FILE* maps1;
+    maps1=fopen("maps/map1.txt","r");
+    for(j=0;j<HAUTEUR_FENETRE;j++)
+           {
+               for(i=0;i<LARGEUR_FENETRE;i++)
+                    {
+                        fscanf(maps1,"%d ",&carte[j][i]);
+                    }
+           }
     SDL_Rect Rect_dest;
     SDL_Rect Rect_source;
     Rect_source.w = LARGEUR_TILE;
     Rect_source.h = HAUTEUR_TILE;
+
     for(i=0;i<LARGEUR_FENETRE;i++)
     {
         for(j=0;j<HAUTEUR_FENETRE;j++)
         {
             Rect_dest.x = i*LARGEUR_TILE;
             Rect_dest.y = j*HAUTEUR_TILE;
-            Rect_source.x = (carte[j][i]-'1')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=1)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(sable,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'2')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=2)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_bas_gauche,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'3')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=3)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_bas_droite,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'4')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=4)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_milieu_bas_gauche,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'5')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=5)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_milieu_bas_droite,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'6')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=6)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_milieu_haut_gauche,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'7')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=7)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_milieu_haut_droite,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'8')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=8)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_haut_gauche,&Rect_source,fenetre,&Rect_dest);
-            Rect_source.x = (carte[j][i]-'9')*LARGEUR_TILE;
+            Rect_source.x = (carte[j][i]!=9)*LARGEUR_TILE;
             Rect_source.y = 0;
             SDL_BlitSurface(immeuble_haut_droite,&Rect_source,fenetre,&Rect_dest);
         }
