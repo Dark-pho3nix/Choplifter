@@ -757,3 +757,12 @@
 	"begin_code.h"
 	"close_code.h"
 
+1359280363 source:c:\users\alexandre\documents\github\choplifter\choplifter_sdl\main.c
+	<stdlib.h>
+	<stdio.h>
+	<SDL/SDL.h>
+	"SDL_image.h"
+	"global.h"
+
+1359020702 c:\users\alexandre\documents\github\choplifter\choplifter_sdl\global.h
+
