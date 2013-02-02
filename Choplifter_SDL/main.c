@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 {
     SDL_Surface *fenetre = NULL, *back = NULL;//Initialisation des images et elements avec des pointeurs
     SDL_Surface *sable = NULL;
-    SDL_Surface *immeuble_bas_gauche = NULL, *immeuble_bas_droite = NULL, *immeuble_milieu_bas_gauche = NULL, *immeuble_milieu_bas_droite = NULL, *immeuble_milieu_haut_gauche = NULL, *immeuble_milieu_haut_droite = NULL, *immeuble_haut_gauche = NULL, *immeuble_haut_droite = NULL;
+    SDL_Surface *immeuble_bas_gauche = NULL, *immeuble_bas_droite = NULL, *immeuble_milieu_bas_gauche = NULL, *immeuble_milieu_bas_droite = NULL, *immeuble_milieu_haut_gauche = NULL, *immeuble_milieu_haut_droite = NULL, *immeuble_haut_gauche = NULL, *immeuble_haut_droite = NULL, *helico = NULL;
     SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
     FILE *erreur = NULL;
 
@@ -55,10 +55,14 @@ int main(int argc, char *argv[])
     immeuble_milieu_haut_droite = IMG_Load("images/tileset/7.png");
     immeuble_haut_gauche = IMG_Load("images/tileset/8.png");
     immeuble_haut_droite = IMG_Load("images/tileset/9.png");
+    helico = IMG_Load("images/tileset/helico_vol_droite.png");
 
-    int i,j,cx;
-    int m = 0;
+    int i,j;
+    int m = 0; //Valeur de transition pour le scroll
+    int hx = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Horizontal
+    int hy = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Vertical
     int carte[HAUTEUR_FENETRE_TILE][LARGEUR_FENETRE_TILE];
+    int touches [4]; // Tableau pour gerer les touches
     FILE* maps1;
     maps1=fopen("maps/map1.txt","r");
     for(j=0;j<HAUTEUR_FENETRE_TILE;j++)
@@ -68,8 +72,9 @@ int main(int argc, char *argv[])
                         fscanf(maps1,"%d ",&carte[j][i]);
                     }
            }
-    SDL_Rect Rect_dest;
-    SDL_Rect Rect_source;
+    SDL_Rect Rect_dest;   // Affiche les tileset
+    SDL_Rect Rect_source; // Séléctionne les images
+    SDL_Rect Rect_helico; // Affichage de l'hélico
     Rect_source.w = LARGEUR_TILE;
     Rect_source.h = HAUTEUR_TILE;
     for(i=0;i<LARGEUR_FENETRE_TILE;i++)
@@ -117,40 +122,148 @@ int main(int argc, char *argv[])
     SDL_EnableKeyRepeat(10, 10);
     while (continuer==1)
     {
-        SDL_WaitEvent(&quitter);
-                                                                //
-            if (quitter.key.keysym.sym==SDLK_ESCAPE)    //
-            {                                           // On test si il y a un appui sur la touche 'echap', si c'est vrai on met la variable a 0 et
-                continuer=0;                            // le jeu quitte.
-            }
-            if (quitter.key.keysym.sym==SDLK_RIGHT)
-            {
-                m=m+4;
-            }
-            if (quitter.key.keysym.sym==SDLK_LEFT)
-            {
-                m=m-4;
-            }
-              if (m<0)
-            {
-              m=0;
-            }
+            while (SDL_PollEvent(&quitter))// Tant que l'événement existe
+        {
 
-            if (m>2560)
+            switch (quitter.type)
             {
-              m=2560;
-            }
 
 
+                // Si une touche est enfoncée
+                case SDL_KEYDOWN: //vérifit les événements en créeant un un tableau pour créer la gestion de plusieurs touches
+                {
 
+                    // Si échap alors on quitte
+                    if (quitter.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        continuer = 0;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_UP)
+                    {
+                        touches[0] = 1;//dstrect.y --;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_DOWN)
+                    {
+                        touches[1] = 1;//dstrect.y ++;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_LEFT)
+                    {
+                        touches[2] = 1;//dstrect.x --;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_RIGHT)
+                    {
+                        touches[3] = 1;//dstrect.x ++;
+                    }
+                    if(quitter.key.keysym.sym == SDLK_SPACE)
+                    {
+                        touches[4] = 1;
+                    }
+                    break;
+                }
+            case SDL_KEYUP: //vérifit les événements en créeant un un tableau pour créer la gestion de plusieurs touches
+            {
+                    if (quitter.key.keysym.sym == SDLK_UP)
+                    {
+                        touches[0] = 0;//dstrect.y --;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_DOWN)
+                    {
+                        touches[1] = 0;//dstrect.y ++;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_LEFT)
+                    {
+                        touches[2] = 0;//dstrect.x --;
+                    }
+                    if (quitter.key.keysym.sym == SDLK_RIGHT)
+                    {
+                        touches[3] = 0;//dstrect.x ++;
+                    }
+                    if(quitter.key.keysym.sym == SDLK_SPACE)
+                    {
+                        touches[4] = 0;
+                    }
+
+                }
+            }// end switch
+        } // end of message processing
+        if (m<0 || hx<0) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
+            {
+            if(touches[2] == 1)
+                {
+                    m=0;
+                hx=hx-4;
+                }
+            if(touches[3] == 1)
+                {
+                    m=0;
+                hx=hx+4;
+                }
+
+            }
+        if (m>(LARGEUR_FENETRE_TILE-20)*64 || hx > 0)   ////limite le scroll et recadre la camera sur l'helico sur le bord droit
+            {
+
+            if(touches[2] == 1)
+                {
+                    m=(LARGEUR_FENETRE_TILE-20)*64;
+                    hx=hx-4;
+                }
+            if(touches[3] == 1)
+                {
+                    m=(LARGEUR_FENETRE_TILE-20)*64;
+                    hx=hx+4;
+                }
+            }
+        if (hx < -584) //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord gauche
+            {          // Seulement l'hélico fait 113 pix de long donc on limite a - 584 car le pixel pilote est au milieux
+                hx = -584;
+            }
+        if (hx > 584)//limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord droit
+            {
+                hx = 584;
+            }
+        if (hy < 0) //limite l'hélico sur le bord bas
+            {
+                hy = 0;
+            }
+        if (hy > 640)//limite l'hélico sur le bord haut
+            {
+                hy = 640;
+            }
+
+        if(touches[0] == 1) //Decalle l'helico sur le bas de 4 pixels
+        {
+            hy=hy+4;
+        }
+        if(touches[1] == 1) //Decalle l'helico sur le haut de 4 pixels
+        {
+            hy=hy-4;
+        }
+        if(touches[2] == 1) //Decalle le scroll sur la gauche de 4 pixels
+        {
+           m=m-4;
+           hx=hx-0;
+        }
+        if(touches[3] == 1) //Decalle le scroll sur la droite de 4 pixels
+        {
+           m=m+4;
+           hx=hx+0;
+        }
+        if(touches[4] == 1) //Prévision de la touche de tire
+        {
+
+        }
         SDL_FillRect(fenetre, NULL, SDL_MapRGB(fenetre->format, 255, 255, 255));
         SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
+        SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);//Charge l'image de l'helico
+        Rect_helico.x = 576+hx ; //Distance en X de l'helico (pour le mettre au mileux de l'écran
+        Rect_helico.y = 640-hy; //Distance en y de l'helico
+
         for(i=0;i<LARGEUR_FENETRE_TILE;i++)
     {
         for(j=0;j<HAUTEUR_FENETRE_TILE;j++)
         {
-            cx = i*LARGEUR_TILE-m;
-            Rect_dest.x = cx;//Ici a faire avec un -M qui sera un pointeur qui décroit par les touches
+            Rect_dest.x = i*LARGEUR_TILE-m;//Ici a faire avec un -M qui sera un pointeur qui décroit par les touches
             Rect_dest.y = j*HAUTEUR_TILE;
             Rect_source.x = (carte[j][i]!=1)*LARGEUR_TILE;
             Rect_source.y = 0;
@@ -185,6 +298,7 @@ int main(int argc, char *argv[])
 
 
         SDL_Flip(fenetre);
+        SDL_Delay(1);
     }
 
     SDL_FreeSurface(back);
@@ -198,5 +312,5 @@ int main(int argc, char *argv[])
     SDL_FreeSurface(immeuble_haut_gauche);
     SDL_FreeSurface(immeuble_haut_droite);
     SDL_Quit();
-    return m;
+    return 0;
 }
