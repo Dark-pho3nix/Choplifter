@@ -1,3 +1,0 @@
-Difficultees renocntrees :
-
-	- Comment verifier le passage dans des fonctions et des boucles alors que printf ne fait rien. --> utilisation de fprintf pour ecrire dans des fichiers
