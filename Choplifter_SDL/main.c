@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include <C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
-#include "C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_image.h" // Inclusion du header pour la SDL
-#include "C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
+#include <D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
+#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL_image.h" // Inclusion du header pour la SDL
+#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
 #include "jeu.h"
 
 
