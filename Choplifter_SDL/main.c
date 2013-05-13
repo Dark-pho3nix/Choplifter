@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
     SDL_Rect positionmenu;// Emplacemet de l'image du background grace a une variable
     FILE *erreur = NULL;
 
-    positionmenu.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche)
+    positionmenu.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche pour le menu)
     positionmenu.y = 0;
 
     SDL_Init(SDL_INIT_EVERYTHING);// Appel de tous les modules de la SDL pour gerer sons, videos, controles du clavier
-    SDL_WM_SetIcon(IMG_Load("images/helico_vol_droite.png"), NULL);
+    SDL_WM_SetIcon(IMG_Load("images/helico_vol_droite.png"), NULL);// On Blit L'image de l'hélicopteur par défaut donc coté droit
     fenetre = SDL_SetVideoMode(1280, 768, 32, SDL_HWSURFACE | SDL_DOUBLEBUF); /* Creation de la fenetre représentée par le pointeur menu en utilisant la largeur et la hauteur.
     On utilise aussi la mémoire vidéo (SDL_HWSURFACE) et le double buffer pour éviter que ça scintille (SDL_HWSURFACE) et le double buffer pour éviter que ça scintille (SDL_DOUBLEBUF)*/
     if ((SDL_Init(SDL_INIT_EVERYTHING) < 0) || (fenetre == NULL)) // On teste l'erreur a l'initialisation des modules de la SDL ou a la creation de la fenetre
@@ -47,31 +47,32 @@ int main(int argc, char *argv[])
 
     int continuer = 1; // On initialise la variable 'continuer' a 1 (booleen pour continuer)
     SDL_Event choix; // On cree une variable de type SDL_Event
-    while (continuer == 1)
+    while (continuer == 1)// On initialise notre boucle qui permet d'executer le code tant que l'éxecution n'a pas était demandé
     {
-        SDL_WaitEvent(&choix);
+        SDL_WaitEvent(&choix);// on attend une réponse au choix dans le menu
         switch (choix.type)
         {
-            case SDL_QUIT:
-                continuer = 0;
-                break;
+            default://Gère les touches non définient dans ce cas
+                    break;
 
             case SDL_KEYDOWN: //Dans le cas ou une touche est pressée
                 switch(choix.key.keysym.sym)  //On vérifie quelle touche est pressée
                 {
+                    default://Gère les touches non définient dans ce cas
+                            break;
+
                     case SDLK_ESCAPE: //Si c'est la touche échape "ECHAP"
                         continuer = 0; //On stoppe la boucle et on quitte
                         break;
 
                     case SDLK_RETURN: //Si c'est la touche "ENTREE"
-/*------------------------------------------------------------------ A inclure dans une fonction --------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------ A inclure dans une fonction (Fonction jeu) --------------------------------------------------------------------------------*/
                         SDL_Surface *back = NULL;//Initialisation des images et elements avec des pointeurs
                         SDL_Surface *sable = NULL;
                         SDL_Surface *immeuble_bas_gauche = NULL, *immeuble_bas_droite = NULL, *immeuble_milieu_bas_gauche = NULL, *immeuble_milieu_bas_droite = NULL, *immeuble_milieu_haut_gauche = NULL, *immeuble_milieu_haut_droite = NULL, *immeuble_haut_gauche = NULL, *immeuble_haut_droite = NULL, *helico = NULL;
                         SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
-                        FILE *erreur = NULL;
 
-                        positionback.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche)
+                        positionback.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche pour l'image de fond)
                         positionback.y = 0;
 
 
@@ -96,8 +97,8 @@ int main(int argc, char *argv[])
                         int hy = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Vertical
                         int carte[HAUTEUR_FENETRE_TILE][LARGEUR_FENETRE_TILE];
                         int touches [4]; // Tableau pour gerer les touches
-                        FILE* maps1;
-                        maps1=fopen("maps/map1.txt","r");
+                        FILE* maps1;//on ouvre le fichier map
+                        maps1=fopen("maps/map1.txt","r");//on lit le fichier map pour le retranscrire la map dans un tableau
                         for(j=0;j<HAUTEUR_FENETRE_TILE;j++)
                                {
                                    for(i=0;i<LARGEUR_FENETRE_TILE;i++)
@@ -159,6 +160,8 @@ int main(int argc, char *argv[])
 
                                 switch (quitter.type)
                                 {
+                                    default://Gère les touches non définient dans ce cas
+                                            break;
 
 
 
@@ -166,7 +169,7 @@ int main(int argc, char *argv[])
                                                      //vérifit les événements en créeant un un tableau pour créer la gestion de plusieurs touches
                                     {
 
-                                            if (quitter.key.keysym.sym == SDLK_p) //Si c'est la touche "p" alors on enclenche la pause
+                                            if (quitter.key.keysym.sym == SDLK_p) //Si c'est la touche "p" alors on enclenche la pause et les touches sont gelées
                                             {
                                                 touches[0] = 0;
                                                 touches[1] = 0;
@@ -174,78 +177,46 @@ int main(int argc, char *argv[])
                                                 touches[3] = 0;
                                                 touches[4] = 0;
                                                 continuer2 = 2;
-/*---------------------------------------------- A inclure dans une autre fonction ---------------------------------------------------------------------------------------*/                                               continuer = 2;
+/*---------------------------------------------- A inclure dans une autre fonction (Fonction pause)---------------------------------------------------------------------------------------*/                                               continuer = 2;
                                                 while (continuer2 == 2)
                                                 {
+                                                    SDL_Surface *menu_pause = NULL;//Initialisation des images et elements avec des pointeurs
+                                                    SDL_Rect positionmenupause;// Emplacemet de l'image du background grace a une variable
 
-                                                    TTF_Init();
+                                                    positionmenupause.x = 0;// Et initialisation a zero en x et en y (coin superieur gauche)
+                                                    positionmenupause.y = 0;
 
-                                                        SDL_Surface *titre = NULL, *texte_menu1 = NULL, *texte_menu2 = NULL;
-                                                        SDL_Color Noir = {255, 255, 255};
-                                                        SDL_Color Gris = {149, 149, 149};
-                                                        SDL_Rect positiontitre;
-                                                        SDL_Rect positiontextemenu1;
-                                                        SDL_Rect positiontextemenu2;
-
-                                                        TTF_Font *police_titre_menu_pause = NULL;
-                                                        TTF_Font *police_texte_menu_pause = NULL;
-                                                        police_titre_menu_pause = TTF_OpenFont("secret.ttf", 40);
-                                                        police_texte_menu_pause = TTF_OpenFont("dock.ttf", 25);
-
-                                                        titre = TTF_RenderText_Blended(police_titre_menu_pause, "|GAME PAUSED|", Noir);
-                                                        texte_menu1 = TTF_RenderText_Blended(police_texte_menu_pause, "Press \"ENTER\" to return to the game !", Gris);
-                                                        texte_menu2 = TTF_RenderText_Blended(police_texte_menu_pause, "Press \"Q\" to return to main title", Gris);
-
-                                                        positiontitre.x = 349;
-                                                        positiontitre.y = 103;
-                                                        SDL_BlitSurface(titre, NULL, fenetre, &positiontitre);
-
-                                                        positiontextemenu1.x = 434;
-                                                        positiontextemenu1.y = 486;
-                                                        SDL_BlitSurface(texte_menu1, NULL, fenetre, &positiontextemenu1);
-
-
-                                                        positiontextemenu2.x = 434;
-                                                        positiontextemenu2.y = 506;
-                                                        SDL_BlitSurface(texte_menu2, NULL, fenetre, &positiontextemenu2);
-
-
-                                                    TTF_CloseFont(police_titre_menu_pause);
-                                                    TTF_CloseFont(police_texte_menu_pause);
-                                                    TTF_Quit();
+                                                    menu_pause = IMG_Load("images/pause.png");//Charge l'image a partir de SDL_Image
+                                                    SDL_BlitSurface(menu_pause, NULL, fenetre, &positionmenupause);//Indique ou sera affichée l'image
+                                                    SDL_Flip(fenetre);
 
                                                          SDL_WaitEvent(&choix);
                                                          switch (choix.type)
                                                          {
-                                                             case SDL_QUIT:
-                                                                 continuer2 = 0;
-                                                                 break;
+                                                             default://Gère les touches non définient dans ce cas
+                                                                        break;
+
                                                              case SDL_KEYDOWN: //Dans le cas ou une touche est pressée
                                                                  switch(choix.key.keysym.sym)  //On vérifie quelle touche est pressée
                                                                  {
+                                                                    default://Gère les touches non définient dans ce cas
+                                                                        break;
+
                                                                      case SDLK_a: //La SDL reconnaissant les clavier qwerty, il faudra enfaite appuyer sur q pour revenir au menu principal
                                                                          continuer2 = 0; //On stoppe la boucle et on quitte
                                                                          continuer = 1;
-                                                                         SDL_FreeSurface(titre);
-                                                                         SDL_FreeSurface(texte_menu1);
-                                                                         SDL_FreeSurface(texte_menu2);
+
                                                                          break;
 
                                                                      case SDLK_RETURN: //Si c'est la touche "ENTREE"
                                                                         continuer2 = 1; //On stoppe la boucle et on retourne au jeu
-                                                                        SDL_FreeSurface(titre);
-                                                                        SDL_FreeSurface(texte_menu1);
-                                                                        SDL_FreeSurface(texte_menu2);
+                                                                        SDL_FreeSurface(menu_pause);
                                                                         break;
-
-
 
                                                                      case SDLK_ESCAPE: //Si c'est la touche "ECHAP"
                                                                         continuer2 = 0; //On stoppe la boucle et on quitte tout
                                                                         continuer = 0;
-                                                                        SDL_FreeSurface(titre);
-                                                                        SDL_FreeSurface(texte_menu1);
-                                                                        SDL_FreeSurface(texte_menu2);
+                                                                        SDL_FreeSurface(menu_pause);
                                                                         break;
                                                                 }
                                                                 break;

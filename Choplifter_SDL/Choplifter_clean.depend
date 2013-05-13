@@ -204,3 +204,19 @@
 
 1367880867 c:\users\alexandre\desktop\[c] choplifter_clean\choplifter_clean\jeu.h
 
+1367964017 source:c:\users\alexandre\documents\github\choplifter\choplifter_sdl\main.c
+	<stdlib.h>
+	<stdio.h>
+	<SDL/SDL.h>
+	<C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
+	"C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_image.h"
+	"C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
+	"jeu.h"
+
+1325793194 c:\program files (x86)\codeblocks\sdl\include\sdl\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+
+1367880867 c:\users\alexandre\documents\github\choplifter\choplifter_sdl\jeu.h
+
