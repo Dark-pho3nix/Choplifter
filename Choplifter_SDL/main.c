@@ -257,6 +257,7 @@ int main(int argc, char *argv[])
                                             }
                                             break;
                                         }
+
                                         case SDL_KEYUP: //vérifit les événements en créeant un un tableau pour créer la gestion de plusieurs touches
                                         {
                                                 if (quitter.key.keysym.sym == SDLK_UP)
@@ -326,23 +327,11 @@ int main(int argc, char *argv[])
                                 {
                                 if(touches[2] == 1)
                                     {
-                                        if (COORDONNEES_ACTUELS_HELICO_X < 20)
-                                        {
-                                            touches[2]=0;
-                                        }
-                                        else
-                                        {
                                         DECALAGE_SCROLL=11;
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-12;
-                                        }
                                     }
                                 if(touches[3] == 1)
                                     {
-                                        if (COORDONNEES_ACTUELS_HELICO_X > 1150)
-                                        {
-                                            touches[3]=0;
-                                        }
-                                        else
                                         DECALAGE_SCROLL=11;
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
                                     }
@@ -362,15 +351,8 @@ int main(int argc, char *argv[])
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
                                     }
                                 }
-                            if (COORDONNEES_ACTUELS_HELICO_X < 20) //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord gauche
-                                {                                   // Seulement l'hélico fait 113 pix de long donc on limite a - 584 car le pixel pilote est au milieux
-                                    touches[2]=0;
-                                }
+
                             //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord droit
-                              if (COORDONNEES_ACTUELS_HELICO_X > 1150)
-                                        {
-                                            touches[3]=0;
-                                        }
                             if (DEPLACMENT_HELICO_Y < 0) //limite l'hélico sur le bord bas
                                 {
                                     DEPLACMENT_HELICO_Y = 0;
