@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include <C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
-#include "C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_image.h" // Inclusion du header pour la SDL
-#include "C:\Program Files (x86)\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
-#include "jeu.h"
+#include <D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
+#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL_image.h" // Inclusion du header pour la SDL
+#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
+
 
 
 
@@ -14,7 +14,9 @@
 #define HAUTEUR_FENETRE_TILE 12
 #define HAUTEUR_FENETRE_AFF 768
 #define LARGEUR_FENETRE_AFF 1280
-
+#define POSITION_ORIGINE_X_HELICO 576 //(position de démarage de l'hélico dans sa base en coordonnées X)
+#define POSITION_ORIGINE_Y_HELICO 640 //(position de démarage de l'hélico dans sa base en coordonnées Y)
+// DEPLACMENT_HELICO_X (coordonnées ajoutées en X par les touches)
 int main(int argc, char *argv[])
 {
     SDL_Surface *fenetre = NULL, *menu = NULL;//Initialisation des images et elements avec des pointeurs
@@ -92,9 +94,9 @@ int main(int argc, char *argv[])
                         helico = IMG_Load("images/tileset/helico_vol_droite.png");
 
                         int i,j;
-                        int m = 0; //Valeur de transition pour le scroll
-                        int hx = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Horizontal
-                        int hy = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Vertical
+                        int DECALAGE_SCROLL = 0; //Valeur de transition pour le scroll
+                        int DEPLACMENT_HELICO_X = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Horizontal
+                        int DEPLACMENT_HELICO_Y = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Vertical
                         int carte[HAUTEUR_FENETRE_TILE][LARGEUR_FENETRE_TILE];
                         int touches [4]; // Tableau pour gerer les touches
                         FILE* maps1;//on ouvre le fichier map
@@ -115,7 +117,7 @@ int main(int argc, char *argv[])
                         {
                             for(j=0;j<HAUTEUR_FENETRE_TILE;j++)
                             {
-                                Rect_dest.x = i*LARGEUR_TILE-m;
+                                Rect_dest.x = i*LARGEUR_TILE-DECALAGE_SCROLL;
                                 //Ici a faire avec un -M qui sera un pointeur qui décroit par les touches
                                 Rect_dest.y = j*HAUTEUR_TILE;
                                 Rect_source.x = (carte[j][i]!=1)*LARGEUR_TILE;
@@ -281,83 +283,113 @@ int main(int argc, char *argv[])
                                         }
                                     }
                                 }
-                            if (m<0 || hx<0) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
-                                {
-                                if(touches[2] == 1)
-                                    {
-                                        m=11;
-                                    hx=hx-12;
-                                    }
-                                if(touches[3] == 1)
-                                    {
-                                        m=11;
-                                    hx=hx+12;
-                                    }
 
-                                }
-                            if (m>(LARGEUR_FENETRE_TILE-20)*64 || hx > 0)   //limite le scroll et recadre la camera sur l'helico sur le bord droit
-                                {
-
-                                if(touches[2] == 1)
-                                    {
-                                        m=(LARGEUR_FENETRE_TILE-20)*64;
-                                        hx=hx-12;
-                                    }
-                                if(touches[3] == 1)
-                                    {
-                                        m=(LARGEUR_FENETRE_TILE-20)*64;
-                                        hx=hx+12;
-                                    }
-                                }
-                            if (hx < -584) //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord gauche
-                                {          // Seulement l'hélico fait 113 pix de long donc on limite a - 584 car le pixel pilote est au milieux
-                                    hx = -584;
-                                }
-                            if (hx > 584)//limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord droit
-                                {
-                                    hx = 584;
-                                }
-                            if (hy < 0) //limite l'hélico sur le bord bas
-                                {
-                                    hy = 0;
-                                }
-                            if (hy > 640)//limite l'hélico sur le bord haut
-                                {
-                                    hy = 640;
-                                }
+                            int COORDONNEES_ACTUELS_HELICO_X = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X)
+                            int COORDONNEES_ACTUELS_HELICO_Y = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y)
+                            COORDONNEES_ACTUELS_HELICO_X = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X;
+                            COORDONNEES_ACTUELS_HELICO_Y = POSITION_ORIGINE_Y_HELICO-DEPLACMENT_HELICO_Y;
 
                             if(touches[0] == 1) //Decalle l'helico sur le bas de 8 pixels
                             {
-                                hy=hy+8;
+                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y+8;
                             }
                             if(touches[1] == 1) //Decalle l'helico sur le haut de 8 pixels
                             {
-                                hy=hy-8;
+                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y-8;
                             }
                             if(touches[2] == 1) //Decalle le scroll sur la gauche de 12 pixels
                             {
-                               m=m-12;
-                               hx=hx-0;
+                                if (COORDONNEES_ACTUELS_HELICO_X < 20)
+                                        {
+                                            touches[2]=0;
+                                        }
+                                        else
+                               DECALAGE_SCROLL=DECALAGE_SCROLL-12;
+                               DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-0;
                             }
                             if(touches[3] == 1) //Decalle le scroll sur la droite de 12 pixels
                             {
-                               m=m+12;
-                               hx=hx+0;
+                                if (COORDONNEES_ACTUELS_HELICO_X > 1150)
+                                        {
+                                            touches[3]=0;
+                                        }
+                                        else
+                               DECALAGE_SCROLL=DECALAGE_SCROLL+12;
+                               DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+0;
                             }
                             if(touches[4] == 1) //Prévision de la touche de tire
                             {
 
                             }
+/*=======================================================VERIFICATION COLLISIONS=============================================================*/
+                            if (DECALAGE_SCROLL<0 || DEPLACMENT_HELICO_X<0) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
+                                {
+                                if(touches[2] == 1)
+                                    {
+                                        if (COORDONNEES_ACTUELS_HELICO_X < 20)
+                                        {
+                                            touches[2]=0;
+                                        }
+                                        else
+                                        {
+                                        DECALAGE_SCROLL=11;
+                                        DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-12;
+                                        }
+                                    }
+                                if(touches[3] == 1)
+                                    {
+                                        if (COORDONNEES_ACTUELS_HELICO_X > 1150)
+                                        {
+                                            touches[3]=0;
+                                        }
+                                        else
+                                        DECALAGE_SCROLL=11;
+                                        DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
+                                    }
+
+                                }
+                            if (DECALAGE_SCROLL>(LARGEUR_FENETRE_TILE-20)*64 || DEPLACMENT_HELICO_X > 0)   //limite le scroll et recadre la camera sur l'helico sur le bord droit
+                                {
+
+                                if(touches[2] == 1)
+                                    {
+                                        DECALAGE_SCROLL=(LARGEUR_FENETRE_TILE-20)*64;
+                                        DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-12;
+                                    }
+                                if(touches[3] == 1)
+                                    {
+                                        DECALAGE_SCROLL=(LARGEUR_FENETRE_TILE-20)*64;
+                                        DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
+                                    }
+                                }
+                            if (COORDONNEES_ACTUELS_HELICO_X < 20) //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord gauche
+                                {                                   // Seulement l'hélico fait 113 pix de long donc on limite a - 584 car le pixel pilote est au milieux
+                                    touches[2]=0;
+                                }
+                            //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord droit
+                              if (COORDONNEES_ACTUELS_HELICO_X > 1150)
+                                        {
+                                            touches[3]=0;
+                                        }
+                            if (DEPLACMENT_HELICO_Y < 0) //limite l'hélico sur le bord bas
+                                {
+                                    DEPLACMENT_HELICO_Y = 0;
+                                }
+                            if (DEPLACMENT_HELICO_Y > 640)//limite l'hélico sur le bord haut
+                                {
+                                    DEPLACMENT_HELICO_Y = 640;
+                                }
+/*=======================================================FIN VERIFICATION COLLISIONS=============================================================*/
                             SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
                             SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);//Charge l'image de l'helico
-                            Rect_helico.x = 576+hx ; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
-                            Rect_helico.y = 640-hy; //Distance en y de l'helico
+                            Rect_helico.x = COORDONNEES_ACTUELS_HELICO_X; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
+                            Rect_helico.y = COORDONNEES_ACTUELS_HELICO_Y; //Distance en y de l'helico
 
                             for(i=0;i<LARGEUR_FENETRE_TILE;i++)
                             {
                                 for(j=0;j<HAUTEUR_FENETRE_TILE;j++)
                                 {
-                                    Rect_dest.x = i*LARGEUR_TILE-m;//Ici a faire avec un -M qui sera un pointeur qui décroit par les touches
+                                    Rect_dest.x = i*LARGEUR_TILE-DECALAGE_SCROLL;//Ici a faire avec un -M qui sera un pointeur qui décroit par les touches
                                     Rect_dest.y = j*HAUTEUR_TILE;
                                     Rect_source.x = (carte[j][i]!=1)*LARGEUR_TILE;
                                     Rect_source.y = 0;
