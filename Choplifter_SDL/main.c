@@ -285,10 +285,42 @@ int main(int argc, char *argv[])
                                     }
                                 }
 
+                            int COORDONNEES_ACTUELS_HELICO_X_ECRAN = 0; //(Coordonnées X où se situe l'hélico sur l'écran donc grile de 1280 X 768)
+                            int COORDONNEES_ACTUELS_HELICO_Y_ECRAN = 0; //(Coordonnées Y où se situe l'hélico sur l'écran donc grile de 1280 X 768)
+                            COORDONNEES_ACTUELS_HELICO_X_ECRAN = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X;
+                            COORDONNEES_ACTUELS_HELICO_Y_ECRAN = POSITION_ORIGINE_Y_HELICO-DEPLACMENT_HELICO_Y;
+
                             int COORDONNEES_ACTUELS_HELICO_X = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X)
                             int COORDONNEES_ACTUELS_HELICO_Y = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y)
-                            COORDONNEES_ACTUELS_HELICO_X = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X;
+                            COORDONNEES_ACTUELS_HELICO_X = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X+DECALAGE_SCROLL;
                             COORDONNEES_ACTUELS_HELICO_Y = POSITION_ORIGINE_Y_HELICO-DEPLACMENT_HELICO_Y;
+
+                            int COORDONNEES_COLLISION_HELICO_X_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_Y_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
+                            int COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
+                            COORDONNEES_COLLISION_HELICO_X_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_GAUCHE = (COORDONNEES_ACTUELS_HELICO_Y)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_Y+61)/(64);
+
+                            int COORDONNEES_COLLISION_HELICO_X_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_Y_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_X_BORD_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
+                            int COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
+                            COORDONNEES_COLLISION_HELICO_X_DROITE = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_DROITE = (COORDONNEES_ACTUELS_HELICO_Y)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BORD_DROITE = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE = (COORDONNEES_ACTUELS_HELICO_Y+61)/(64);
+
+                            int COORDONNEES_COLLISION_HELICO_X_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_Y_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
+                            int COORDONNEES_COLLISION_HELICO_X_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
+                            int COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
+                            COORDONNEES_COLLISION_HELICO_X_BAS = (COORDONNEES_ACTUELS_HELICO_X)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
 
                             if(touches[0] == 1) //Decalle l'helico sur le bas de 8 pixels
                             {
@@ -296,11 +328,16 @@ int main(int argc, char *argv[])
                             }
                             if(touches[1] == 1) //Decalle l'helico sur le haut de 8 pixels
                             {
+                                if (carte [COORDONNEES_COLLISION_HELICO_Y_BAS][COORDONNEES_COLLISION_HELICO_X_BAS] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_BAS][COORDONNEES_COLLISION_HELICO_X_BORD_BAS] > 0)
+                                        {
+                                            touches[1]=0;
+                                        }
+                                        else
                                 DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y-8;
                             }
                             if(touches[2] == 1) //Decalle le scroll sur la gauche de 12 pixels
                             {
-                                if (COORDONNEES_ACTUELS_HELICO_X < 20)
+                                if (COORDONNEES_ACTUELS_HELICO_X < 20 || carte [COORDONNEES_COLLISION_HELICO_Y_GAUCHE][COORDONNEES_COLLISION_HELICO_X_GAUCHE] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE][COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE] > 0)
                                         {
                                             touches[2]=0;
                                         }
@@ -310,7 +347,7 @@ int main(int argc, char *argv[])
                             }
                             if(touches[3] == 1) //Decalle le scroll sur la droite de 12 pixels
                             {
-                                if (COORDONNEES_ACTUELS_HELICO_X > 1150)
+                                if (COORDONNEES_ACTUELS_HELICO_X > 3710|| carte [COORDONNEES_COLLISION_HELICO_Y_DROITE][COORDONNEES_COLLISION_HELICO_X_DROITE] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE][COORDONNEES_COLLISION_HELICO_X_BORD_DROITE] > 0)
                                         {
                                             touches[3]=0;
                                         }
@@ -364,8 +401,8 @@ int main(int argc, char *argv[])
 /*=======================================================FIN VERIFICATION COLLISIONS=============================================================*/
                             SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
                             SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);//Charge l'image de l'helico
-                            Rect_helico.x = COORDONNEES_ACTUELS_HELICO_X; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
-                            Rect_helico.y = COORDONNEES_ACTUELS_HELICO_Y; //Distance en y de l'helico
+                            Rect_helico.x = COORDONNEES_ACTUELS_HELICO_X_ECRAN; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
+                            Rect_helico.y = COORDONNEES_ACTUELS_HELICO_Y_ECRAN; //Distance en y de l'helico
 
                             for(i=0;i<LARGEUR_FENETRE_TILE;i++)
                             {
