@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL/SDL.h>
-#include <D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_BlitSurface.h>
-#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL_image.h" // Inclusion du header pour la SDL
-#include "D:\Logiciels\Logiciels école\CodeBlocks\SDL\include\SDL\SDL_ttf.h"
-
+#include <SDL/SDL_BlitSurface.h>
+#include <SDL/SDL_image.h> // Inclusion du header pour la SDL
 
 
 
@@ -68,6 +66,9 @@ int main(int argc, char *argv[])
                         break;
 
                     case SDLK_RETURN: //Si c'est la touche "ENTREE"
+                    {
+
+
 /*------------------------------------------------------------------ A inclure dans une fonction (Fonction jeu) --------------------------------------------------------------------------------*/
                         SDL_Surface *back = NULL;//Initialisation des images et elements avec des pointeurs
                         SDL_Surface *sable = NULL;
@@ -317,9 +318,9 @@ int main(int argc, char *argv[])
                             int COORDONNEES_COLLISION_HELICO_Y_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_X_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
                             int COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
-                            COORDONNEES_COLLISION_HELICO_X_BAS = (COORDONNEES_ACTUELS_HELICO_X)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BAS = (COORDONNEES_ACTUELS_HELICO_X+2)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
-                            COORDONNEES_COLLISION_HELICO_X_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_X+111)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
 
                             if(touches[0] == 1) //Decalle l'helico sur le bas de 8 pixels
@@ -458,6 +459,7 @@ int main(int argc, char *argv[])
                         SDL_FreeSurface(immeuble_haut_droite);
 
                         break;
+                        }
                 }
                 break;
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
