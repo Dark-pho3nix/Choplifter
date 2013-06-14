@@ -5,7 +5,6 @@
 #include <SDL/SDL_image.h> // Inclusion du header pour la SDL
 
 
-
 #define LARGEUR_TILE 64  // hauteur et largeur des tiles.
 #define HAUTEUR_TILE 64
 #define LARGEUR_FENETRE_TILE 60  // nombre a afficher en x et y
@@ -14,6 +13,8 @@
 #define LARGEUR_FENETRE_AFF 1280
 #define POSITION_ORIGINE_X_HELICO 576 //(position de démarage de l'hélico dans sa base en coordonnées X)
 #define POSITION_ORIGINE_Y_HELICO 640 //(position de démarage de l'hélico dans sa base en coordonnées Y)
+
+
 // DEPLACMENT_HELICO_X (coordonnées ajoutées en X par les touches)
 int main(int argc, char *argv[])
 {
@@ -43,35 +44,17 @@ int main(int argc, char *argv[])
     menu = IMG_Load("images/menu.png");//Charge l'image a partir de SDL_Image
     SDL_BlitSurface(menu, NULL, fenetre, &positionmenu);//Indique ou sera affichée l'image
 
-
+    startgame: ;
 
     int continuer = 1; // On initialise la variable 'continuer' a 1 (booleen pour continuer)
     SDL_Event choix; // On cree une variable de type SDL_Event
-    while (continuer == 1)// On initialise notre boucle qui permet d'executer le code tant que l'éxecution n'a pas était demandé
-    {
-        SDL_WaitEvent(&choix);// on attend une réponse au choix dans le menu
-        switch (choix.type)
-        {
-            default://Gère les touches non définient dans ce cas
-                    break;
 
-            case SDL_KEYDOWN: //Dans le cas ou une touche est pressée
-                switch(choix.key.keysym.sym)  //On vérifie quelle touche est pressée
-                {
-                    default://Gère les touches non définient dans ce cas
-                            break;
-
-                    case SDLK_ESCAPE: //Si c'est la touche échape "ECHAP"
-                        continuer = 0; //On stoppe la boucle et on quitte
-                        break;
-
-                    case SDLK_RETURN: //Si c'est la touche "ENTREE"
-                    {
-
-
-/*------------------------------------------------------------------ A inclure dans une fonction (Fonction jeu) --------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------ INITIALISATION --------------------------------------------------------------------------------*/
                         SDL_Surface *back = NULL;//Initialisation des images et elements avec des pointeurs
                         SDL_Surface *sable = NULL;
+                        SDL_Surface *soucoupe = NULL;
+                        SDL_Surface *tire = NULL;
+                        SDL_Surface *explosion = NULL;
                         SDL_Surface *immeuble_bas_gauche = NULL, *immeuble_bas_droite = NULL, *immeuble_milieu_bas_gauche = NULL, *immeuble_milieu_bas_droite = NULL, *immeuble_milieu_haut_gauche = NULL, *immeuble_milieu_haut_droite = NULL, *immeuble_haut_gauche = NULL, *immeuble_haut_droite = NULL, *helico = NULL;
                         SDL_Rect positionback;// Emplacemet de l'image du background grace a une variable
 
@@ -93,6 +76,9 @@ int main(int argc, char *argv[])
                         immeuble_haut_gauche = IMG_Load("images/tileset/16.png");
                         immeuble_haut_droite = IMG_Load("images/tileset/17.png");
                         helico = IMG_Load("images/tileset/helico_vol_droite.png");
+                        soucoupe = IMG_Load("images/tileset/soucoupe.png");
+                        tire = IMG_Load("images/tileset/tire.png");
+                        explosion = IMG_Load("images/tileset/explosion/explo1.png");
 
                         int i,j;
                         int DECALAGE_SCROLL = 0; //Valeur de transition pour le scroll
@@ -112,6 +98,9 @@ int main(int argc, char *argv[])
                         SDL_Rect Rect_dest;   // Affiche les tileset
                         SDL_Rect Rect_source; // Séléctionne les images
                         SDL_Rect Rect_helico; // Affichage de l'hélico
+                        SDL_Rect Rect_soucoupe; // Affichage de la soucoupe
+                        SDL_Rect Rect_tire;
+                        SDL_Rect Rect_explosion;
                         Rect_source.w = LARGEUR_TILE;
                         Rect_source.h = HAUTEUR_TILE;
                         for(i=0;i<LARGEUR_FENETRE_TILE;i++)
@@ -152,6 +141,39 @@ int main(int argc, char *argv[])
 
                         }
 
+    int COORDONNEES_SOUCOUPE_X = -2000;
+    int COORDONNEES_SOUCOUPE_Y = 20;
+    int COORDONNEES_EXPLOSION_SOUCOUPE_X = -99999;
+    int COORDONNEES_EXPLOSION_SOUCOUPE_Y = -99999;
+    int EXPLOSION_SOUCOUPE = 0;
+    int etat_helico_pour_rotation = 0;
+    int etat_helico_tire = 0;
+    int TIRE_EXISTANT = 0;
+    int COORDONNEES_Y_TIRE = -99999;
+    int COORDONNEES_X_TIRE = -99999;
+
+/*------------------------------------------------------------------ FIN INITIALISATION --------------------------------------------------------------------------------*/
+
+    while (continuer == 1)// On initialise notre boucle qui permet d'executer le code tant que l'éxecution n'a pas était demandé
+    {
+        SDL_WaitEvent(&choix);// on attend une réponse au choix dans le menu
+        switch (choix.type)
+        {
+            default://Gère les touches non définient dans ce cas
+                    break;
+
+            case SDL_KEYDOWN: //Dans le cas ou une touche est pressée
+                switch(choix.key.keysym.sym)  //On vérifie quelle touche est pressée
+                {
+                    default://Gère les touches non définient dans ce cas
+                            break;
+
+                    case SDLK_ESCAPE: //Si c'est la touche échape "ECHAP"
+                        continuer = 0; //On stoppe la boucle et on quitte
+                        break;
+
+                    case SDLK_RETURN: //Si c'est la touche "ENTREE"
+                    {
                         int continuer2 = 1; // On initialise la variable 'continuer2' a 1
                         SDL_Event quitter; // On cree une variable de type SDL_Event
                         SDL_EnableKeyRepeat(10, 10);
@@ -179,6 +201,7 @@ int main(int argc, char *argv[])
                                                 touches[2] = 0;
                                                 touches[3] = 0;
                                                 touches[4] = 0;
+                                                touches[5] = 0;
                                                 continuer2 = 2;
 /*---------------------------------------------- A inclure dans une autre fonction (Fonction pause)---------------------------------------------------------------------------------------*/                                               continuer = 2;
                                                 while (continuer2 == 2)
@@ -208,6 +231,7 @@ int main(int argc, char *argv[])
                                                                      case SDLK_a: //La SDL reconnaissant les clavier qwerty, il faudra enfaite appuyer sur q pour revenir au menu principal
                                                                          continuer2 = 0; //On stoppe la boucle et on quitte
                                                                          continuer = 1;
+                                                                         goto startgame;
 
                                                                          break;
 
@@ -230,6 +254,7 @@ int main(int argc, char *argv[])
                                                 }
                                             }
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
                                             if (quitter.key.keysym.sym == SDLK_UP)
                                             {
                                                 touches[0] = 1;//dstrect.y --;
@@ -249,6 +274,11 @@ int main(int argc, char *argv[])
                                             if(quitter.key.keysym.sym == SDLK_SPACE)
                                             {
                                                 touches[4] = 1;
+                                            }
+                                            if(quitter.key.keysym.sym == SDLK_TAB)
+                                            {
+                                                touches[5] = 1;
+                                                SDL_Delay(20);
                                             }
                                             if(quitter.key.keysym.sym == SDLK_ESCAPE) // Si échap alors on quitte tout
                                             {
@@ -280,6 +310,10 @@ int main(int argc, char *argv[])
                                                 if(quitter.key.keysym.sym == SDLK_SPACE)
                                                 {
                                                     touches[4] = 0;
+                                                }
+                                                if(quitter.key.keysym.sym == SDLK_TAB)
+                                                {
+                                                    touches[5] = 0;
                                                 }
 
                                         }
@@ -358,8 +392,106 @@ int main(int argc, char *argv[])
                             }
                             if(touches[4] == 1) //Prévision de la touche de tire
                             {
+                                if (TIRE_EXISTANT == 1)
+                                {
+                                    touches[4] = 0;
+                                }
+                                else
+                                    {
+                                         if (etat_helico_pour_rotation == 1 || etat_helico_pour_rotation == 3 )
+                                        {
+                                            etat_helico_tire = 1;
+                                            TIRE_EXISTANT =  1;
+                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN + 56;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                        }
+
+                                        if (etat_helico_pour_rotation == 0)
+                                        {
+                                            etat_helico_tire = 2;
+                                            TIRE_EXISTANT =  1;
+                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN + 113;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                        }
+
+                                        if (etat_helico_pour_rotation == 2)
+                                        {
+                                            etat_helico_tire = 3;
+                                            TIRE_EXISTANT =  1;
+                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                        }
+                                    }
 
                             }
+
+                            if(touches[5] == 1) //Prévision de la touche de tire
+                            {
+                               switch(etat_helico_pour_rotation)
+                                {
+                                    case 0 :
+                                    helico = IMG_Load("images/tileset/helico_face.png");
+                                    SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);
+                                    SDL_Flip(fenetre);
+                                    etat_helico_pour_rotation = 1;
+                                    break;
+
+                                    case 1 :
+                                    helico = IMG_Load("images/tileset/helico_vol_gauche.png");
+                                    SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);
+                                    SDL_Flip(fenetre);
+                                    etat_helico_pour_rotation = 2;
+                                    break;
+
+                                    case 2 :
+                                    helico = IMG_Load("images/tileset/helico_face.png");
+                                    SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);
+                                    SDL_Flip(fenetre);
+                                    etat_helico_pour_rotation = 3;
+                                    break;
+
+                                    case 3 :
+                                    helico = IMG_Load("images/tileset/helico_vol_droite.png");
+                                    SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);
+                                    SDL_Flip(fenetre);
+                                    etat_helico_pour_rotation = 0;
+                                    break;
+
+                                }
+                            }
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ ----------------------------------------- Fonction Rotation helico ---------------------------------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ ----------------------------------------- FIN Fonction Rotation helico ---------------------------------------------------------------------------------------------
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+ /*====================================================Fonction TIRE=================================================================================================*/
+if ( etat_helico_tire == 1 && TIRE_EXISTANT ==  1)
+                                        {
+                                            COORDONNEES_Y_TIRE += 20;
+                                        }
+
+if ( etat_helico_tire == 2 && TIRE_EXISTANT ==  1)
+                                        {
+                                            COORDONNEES_X_TIRE += 20;
+                                        }
+
+if ( etat_helico_tire == 3 && TIRE_EXISTANT ==  1)
+                                        {
+                                            COORDONNEES_X_TIRE -= 20;
+                                        }
+
+if (TIRE_EXISTANT ==  1 && ( COORDONNEES_X_TIRE - COORDONNEES_ACTUELS_HELICO_X_ECRAN < (-200) || COORDONNEES_X_TIRE - (COORDONNEES_ACTUELS_HELICO_X_ECRAN + 112 ) > 200 ||  COORDONNEES_Y_TIRE - (COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62 ) > 200 ) )
+{
+    TIRE_EXISTANT =  0;
+    COORDONNEES_Y_TIRE = -99999;
+    COORDONNEES_X_TIRE = -99999;
+}
+ /*====================================================FIN Fonction TIRE=================================================================================================*/
 /*=======================================================VERIFICATION COLLISIONS=============================================================*/
                             if (DECALAGE_SCROLL<0 || DEPLACMENT_HELICO_X<0) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
                                 {
@@ -400,10 +532,192 @@ int main(int argc, char *argv[])
                                     DEPLACMENT_HELICO_Y = 640;
                                 }
 /*=======================================================FIN VERIFICATION COLLISIONS=============================================================*/
+
+/*=======================================================DEPLACMENT AVION=============================================================*/
+
+/*=======================================================FIN AVION=============================================================*/
+
+/*=======================================================DEBUT SOUCOUPE=============================================================*/
+if ( COORDONNEES_SOUCOUPE_X < COORDONNEES_ACTUELS_HELICO_X_ECRAN )
+        {
+            COORDONNEES_SOUCOUPE_X += 6;
+        }
+
+if ( COORDONNEES_SOUCOUPE_X > COORDONNEES_ACTUELS_HELICO_X_ECRAN )
+        {
+            COORDONNEES_SOUCOUPE_X -= 6;
+        }
+
+if ( COORDONNEES_SOUCOUPE_Y < COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 4 )
+        {
+            COORDONNEES_SOUCOUPE_Y += 6;
+        }
+
+if ( COORDONNEES_SOUCOUPE_Y > COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 4 )
+        {
+            COORDONNEES_SOUCOUPE_Y -= 6;
+        }
+if ( ( COORDONNEES_SOUCOUPE_X<= COORDONNEES_X_TIRE && (COORDONNEES_SOUCOUPE_X + 113 ) >= COORDONNEES_X_TIRE ) && ( COORDONNEES_SOUCOUPE_Y<= COORDONNEES_Y_TIRE && (COORDONNEES_SOUCOUPE_Y + 62 ) >= COORDONNEES_Y_TIRE ) )
+        {
+            COORDONNEES_EXPLOSION_SOUCOUPE_X = COORDONNEES_SOUCOUPE_X;
+            COORDONNEES_EXPLOSION_SOUCOUPE_Y = COORDONNEES_SOUCOUPE_Y;
+            COORDONNEES_SOUCOUPE_X = -2000;
+            EXPLOSION_SOUCOUPE = 1;
+        }
+if (EXPLOSION_SOUCOUPE > 0)
+{
+        switch(EXPLOSION_SOUCOUPE)
+                                {
+                                    case 1 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo1.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 2;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 2 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo2.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 3;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 3 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo3.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 4;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 4 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo4.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 5;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 5 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo5.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 6;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 6 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo6.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 7;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 7 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo7.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 8;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 8 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo8.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 9;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 9 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo9.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 10;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 10 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo10.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 11;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 11 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo11.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 12;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 12 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo12.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 13;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 13 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo13.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 14;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 14 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo14.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 15;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 15 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo15.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 16;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 16 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo16.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_SOUCOUPE = 0;
+                                    SDL_Delay(2);
+                                    break;
+                                }
+
+}
+
+/*=======================================================FIN SOUCOUPE=============================================================*/
+
                             SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
+
                             SDL_BlitSurface(helico, NULL, fenetre, &Rect_helico);//Charge l'image de l'helico
                             Rect_helico.x = COORDONNEES_ACTUELS_HELICO_X_ECRAN; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
                             Rect_helico.y = COORDONNEES_ACTUELS_HELICO_Y_ECRAN; //Distance en y de l'helico
+
+                            SDL_BlitSurface(soucoupe, NULL, fenetre, &Rect_soucoupe);
+                            Rect_soucoupe.x = COORDONNEES_SOUCOUPE_X; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
+                            Rect_soucoupe.y = COORDONNEES_SOUCOUPE_Y;
+
+                            SDL_BlitSurface(tire, NULL, fenetre, &Rect_tire);
+                            Rect_tire.x = COORDONNEES_X_TIRE; //Distance en X de l'helico (pour le mettre au mileux de l'écran)
+                            Rect_tire.y = COORDONNEES_Y_TIRE;
+
+
+                            Rect_explosion.x = COORDONNEES_EXPLOSION_SOUCOUPE_X;
+                            Rect_explosion.y = COORDONNEES_EXPLOSION_SOUCOUPE_Y;
 
                             for(i=0;i<LARGEUR_FENETRE_TILE;i++)
                             {
