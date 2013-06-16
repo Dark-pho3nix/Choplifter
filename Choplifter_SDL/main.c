@@ -11,7 +11,7 @@
 #define HAUTEUR_FENETRE_TILE 12
 #define HAUTEUR_FENETRE_AFF 768
 #define LARGEUR_FENETRE_AFF 1280
-#define POSITION_ORIGINE_X_HELICO 576 //(position de démarage de l'hélico dans sa base en coordonnées X)
+#define POSITION_ORIGINE_X_HELICO 300 //(position de démarage de l'hélico dans sa base en coordonnées X)
 #define POSITION_ORIGINE_Y_HELICO 640 //(position de démarage de l'hélico dans sa base en coordonnées Y)
 
 
@@ -67,14 +67,14 @@ int main(int argc, char *argv[])
                         SDL_BlitSurface(back, NULL, fenetre, &positionback);//Indique ou sera affichée l'image
 
                         sable = IMG_Load("images/tileset/1.png");
-                        immeuble_bas_gauche = IMG_Load("images/tileset/10.png");
-                        immeuble_bas_droite = IMG_Load("images/tileset/11.png");
-                        immeuble_milieu_bas_gauche = IMG_Load("images/tileset/12.png");
-                        immeuble_milieu_bas_droite = IMG_Load("images/tileset/13.png");
-                        immeuble_milieu_haut_gauche = IMG_Load("images/tileset/14.png");
-                        immeuble_milieu_haut_droite = IMG_Load("images/tileset/15.png");
-                        immeuble_haut_gauche = IMG_Load("images/tileset/16.png");
-                        immeuble_haut_droite = IMG_Load("images/tileset/17.png");
+                        immeuble_bas_gauche = IMG_Load("images/tileset/2.png");
+                        immeuble_bas_droite = IMG_Load("images/tileset/3.png");
+                        immeuble_milieu_bas_gauche = IMG_Load("images/tileset/4.png");
+                        immeuble_milieu_bas_droite = IMG_Load("images/tileset/5.png");
+                        immeuble_milieu_haut_gauche = IMG_Load("images/tileset/6.png");
+                        immeuble_milieu_haut_droite = IMG_Load("images/tileset/7.png");
+                        immeuble_haut_gauche = IMG_Load("images/tileset/8.png");
+                        immeuble_haut_droite = IMG_Load("images/tileset/9.png");
                         helico = IMG_Load("images/tileset/helico_vol_droite.png");
                         soucoupe = IMG_Load("images/tileset/soucoupe.png");
                         tire = IMG_Load("images/tileset/tire.png");
@@ -84,6 +84,9 @@ int main(int argc, char *argv[])
                         int DECALAGE_SCROLL = 0; //Valeur de transition pour le scroll
                         int DEPLACMENT_HELICO_X = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Horizontal
                         int DEPLACMENT_HELICO_Y = 0; //Valeur de transition pour le déplacmeent de l'hélico en axe Vertical
+                        int COORDONNEES_TIRE_T0_X;
+                        int COORDONNEES_TIRE_T0_Y;
+                        int VIE_HELICO = 3;
                         int carte[HAUTEUR_FENETRE_TILE][LARGEUR_FENETRE_TILE];
                         int touches [4]; // Tableau pour gerer les touches
                         FILE* maps1;//on ouvre le fichier map
@@ -143,9 +146,10 @@ int main(int argc, char *argv[])
 
     int COORDONNEES_SOUCOUPE_X = -2000;
     int COORDONNEES_SOUCOUPE_Y = 20;
-    int COORDONNEES_EXPLOSION_SOUCOUPE_X = -99999;
-    int COORDONNEES_EXPLOSION_SOUCOUPE_Y = -99999;
+    int COORDONNEES_EXPLOSION_X = -99999;
+    int COORDONNEES_EXPLOSION_Y = -99999;
     int EXPLOSION_SOUCOUPE = 0;
+    int EXPLOSION_HELICO = 0;
     int etat_helico_pour_rotation = 0;
     int etat_helico_tire = 0;
     int TIRE_EXISTANT = 0;
@@ -323,21 +327,21 @@ int main(int argc, char *argv[])
                             int COORDONNEES_ACTUELS_HELICO_X_ECRAN = 0; //(Coordonnées X où se situe l'hélico sur l'écran donc grile de 1280 X 768)
                             int COORDONNEES_ACTUELS_HELICO_Y_ECRAN = 0; //(Coordonnées Y où se situe l'hélico sur l'écran donc grile de 1280 X 768)
                             COORDONNEES_ACTUELS_HELICO_X_ECRAN = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X;
-                            COORDONNEES_ACTUELS_HELICO_Y_ECRAN = POSITION_ORIGINE_Y_HELICO-DEPLACMENT_HELICO_Y;
+                            COORDONNEES_ACTUELS_HELICO_Y_ECRAN = POSITION_ORIGINE_Y_HELICO+DEPLACMENT_HELICO_Y;
 
                             int COORDONNEES_ACTUELS_HELICO_X = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X)
                             int COORDONNEES_ACTUELS_HELICO_Y = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y)
                             COORDONNEES_ACTUELS_HELICO_X = POSITION_ORIGINE_X_HELICO+DEPLACMENT_HELICO_X+DECALAGE_SCROLL;
-                            COORDONNEES_ACTUELS_HELICO_Y = POSITION_ORIGINE_Y_HELICO-DEPLACMENT_HELICO_Y;
+                            COORDONNEES_ACTUELS_HELICO_Y = POSITION_ORIGINE_Y_HELICO+DEPLACMENT_HELICO_Y;
 
                             int COORDONNEES_COLLISION_HELICO_X_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_Y_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
                             int COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
-                            COORDONNEES_COLLISION_HELICO_X_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X-11)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_GAUCHE = (COORDONNEES_ACTUELS_HELICO_Y)/(64);
-                            COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X)/(64);
-                            COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_Y+61)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_X-11)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE = (COORDONNEES_ACTUELS_HELICO_Y+58)/(64);
 
                             int COORDONNEES_COLLISION_HELICO_X_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_Y_DROITE = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
@@ -346,49 +350,66 @@ int main(int argc, char *argv[])
                             COORDONNEES_COLLISION_HELICO_X_DROITE = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_DROITE = (COORDONNEES_ACTUELS_HELICO_Y)/(64);
                             COORDONNEES_COLLISION_HELICO_X_BORD_DROITE = (COORDONNEES_ACTUELS_HELICO_X+113)/(64);
-                            COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE = (COORDONNEES_ACTUELS_HELICO_Y+61)/(64);
+                            COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE = (COORDONNEES_ACTUELS_HELICO_Y+58)/(64);
 
                             int COORDONNEES_COLLISION_HELICO_X_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_Y_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau)
                             int COORDONNEES_COLLISION_HELICO_X_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en X pour tester les collisions dans le tableau Bord Droit)
                             int COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = 0; //(Coordonnées où se situe l'hélico suite au mouvement des touches en Y pour tester les collisions dans le tableau Bord Bas)
-                            COORDONNEES_COLLISION_HELICO_X_BAS = (COORDONNEES_ACTUELS_HELICO_X+2)/(64);
+                            COORDONNEES_COLLISION_HELICO_X_BAS = (COORDONNEES_ACTUELS_HELICO_X+10)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
                             COORDONNEES_COLLISION_HELICO_X_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_X+111)/(64);
                             COORDONNEES_COLLISION_HELICO_Y_BORD_BAS = (COORDONNEES_ACTUELS_HELICO_Y+70)/(64);
 
+                            if (EXPLOSION_HELICO != 0)
+                                {
+                                    touches[0] = 0;
+                                    touches[1] = 0;
+                                    touches[2] = 0;
+                                    touches[3] = 0;
+                                    touches[4] = 0;
+                                    touches[5] = 0;
+                                }
+
                             if(touches[0] == 1) //Decalle l'helico sur le bas de 8 pixels
                             {
-                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y+8;
+                                if (COORDONNEES_ACTUELS_HELICO_Y == 0 )
+                                        {
+                                            touches[0]=0;
+                                            EXPLOSION_HELICO = 1;
+                                        }
+                                else
+                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y-12;
                             }
                             if(touches[1] == 1) //Decalle l'helico sur le haut de 8 pixels
                             {
                                 if (carte [COORDONNEES_COLLISION_HELICO_Y_BAS][COORDONNEES_COLLISION_HELICO_X_BAS] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_BAS][COORDONNEES_COLLISION_HELICO_X_BORD_BAS] > 0)
                                         {
                                             touches[1]=0;
+                                            EXPLOSION_HELICO = 1;
                                         }
                                         else
-                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y-8;
+                                DEPLACMENT_HELICO_Y=DEPLACMENT_HELICO_Y+12;
                             }
                             if(touches[2] == 1) //Decalle le scroll sur la gauche de 12 pixels
                             {
                                 if (COORDONNEES_ACTUELS_HELICO_X < 20 || carte [COORDONNEES_COLLISION_HELICO_Y_GAUCHE][COORDONNEES_COLLISION_HELICO_X_GAUCHE] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_GAUCHE][COORDONNEES_COLLISION_HELICO_X_BORD_GAUCHE] > 0)
                                         {
                                             touches[2]=0;
+                                            EXPLOSION_HELICO = 1;
                                         }
                                         else
                                DECALAGE_SCROLL=DECALAGE_SCROLL-12;
-                               DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-0;
                             }
                             if(touches[3] == 1) //Decalle le scroll sur la droite de 12 pixels
                             {
                                 if (COORDONNEES_ACTUELS_HELICO_X > 3710|| carte [COORDONNEES_COLLISION_HELICO_Y_DROITE][COORDONNEES_COLLISION_HELICO_X_DROITE] >0 || carte [COORDONNEES_COLLISION_HELICO_Y_BORD_DROITE][COORDONNEES_COLLISION_HELICO_X_BORD_DROITE] > 0)
                                         {
                                             touches[3]=0;
+                                            EXPLOSION_HELICO = 1;
                                         }
                                         else
                                DECALAGE_SCROLL=DECALAGE_SCROLL+12;
-                               DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+0;
                             }
                             if(touches[4] == 1) //Prévision de la touche de tire
                             {
@@ -398,28 +419,30 @@ int main(int argc, char *argv[])
                                 }
                                 else
                                     {
+                                        COORDONNEES_TIRE_T0_X = COORDONNEES_ACTUELS_HELICO_X_ECRAN;
+                                        COORDONNEES_TIRE_T0_Y = COORDONNEES_ACTUELS_HELICO_Y_ECRAN;
                                          if (etat_helico_pour_rotation == 1 || etat_helico_pour_rotation == 3 )
                                         {
                                             etat_helico_tire = 1;
                                             TIRE_EXISTANT =  1;
-                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN + 56;
-                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                            COORDONNEES_X_TIRE = COORDONNEES_TIRE_T0_X + 56;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_TIRE_T0_Y + 62;
                                         }
 
                                         if (etat_helico_pour_rotation == 0)
                                         {
                                             etat_helico_tire = 2;
                                             TIRE_EXISTANT =  1;
-                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN + 113;
-                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                            COORDONNEES_X_TIRE = COORDONNEES_TIRE_T0_X + 113;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_TIRE_T0_Y + 62;
                                         }
 
                                         if (etat_helico_pour_rotation == 2)
                                         {
                                             etat_helico_tire = 3;
                                             TIRE_EXISTANT =  1;
-                                            COORDONNEES_X_TIRE = COORDONNEES_ACTUELS_HELICO_X_ECRAN;
-                                            COORDONNEES_Y_TIRE = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62;
+                                            COORDONNEES_X_TIRE = COORDONNEES_TIRE_T0_X;
+                                            COORDONNEES_Y_TIRE = COORDONNEES_TIRE_T0_Y + 62;
                                         }
                                     }
 
@@ -460,16 +483,176 @@ int main(int argc, char *argv[])
                                 }
                             }
 
+
+
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------
- ----------------------------------------- Fonction Rotation helico ---------------------------------------------------------------------------------------------
+ ----------------------------------------- Fonction Explosion helico ---------------------------------------------------------------------------------------------
  ----------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+ if (EXPLOSION_HELICO == 1 )
+ {
+    COORDONNEES_EXPLOSION_X = COORDONNEES_ACTUELS_HELICO_X_ECRAN + 20;
+    COORDONNEES_EXPLOSION_Y = COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 10;
+ }
+if (EXPLOSION_HELICO > 0)
+{
+    COORDONNEES_ACTUELS_HELICO_X_ECRAN = 99999;
+    COORDONNEES_ACTUELS_HELICO_Y_ECRAN = 99999;
+        switch(EXPLOSION_HELICO)
+                                {
+                                    case 1 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo1.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 2;
+                                    SDL_Delay(2);
+                                    break;
 
+                                    case 2 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo2.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 3;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 3 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo3.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 4;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 4 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo4.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 5;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 5 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo5.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 6;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 6 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo6.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 7;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 7 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo7.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 8;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 8 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo8.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 9;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 9 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo9.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 10;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 10 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo10.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 11;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 11 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo11.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 12;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 12 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo12.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 13;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 13 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo13.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 14;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 14 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo14.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 15;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 15 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo15.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 16;
+                                    SDL_Delay(2);
+                                    break;
+
+                                    case 16 :
+                                    explosion = IMG_Load("images/tileset/explosion/explo16.png");
+                                    SDL_BlitSurface(explosion, NULL, fenetre, &Rect_explosion);
+                                    SDL_Flip(fenetre);
+                                    EXPLOSION_HELICO = 0;
+                                    SDL_Delay(2);
+                                    DECALAGE_SCROLL = 0;
+                                    DEPLACMENT_HELICO_X = 0;
+                                    DEPLACMENT_HELICO_Y = 0;
+                                    VIE_HELICO -= ;
+                                    break;
+
+
+                                }
+}
+
+if ( VIE_HELICO == 0)
+{
+
+}
 
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------
- ----------------------------------------- FIN Fonction Rotation helico ---------------------------------------------------------------------------------------------
+ ----------------------------------------- FIN Fonction Explosion helico ---------------------------------------------------------------------------------------------
  ----------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
  /*====================================================Fonction TIRE=================================================================================================*/
+
+ if (TIRE_EXISTANT ==  1 && ( COORDONNEES_X_TIRE - COORDONNEES_TIRE_T0_X < (-200) || COORDONNEES_X_TIRE - (COORDONNEES_TIRE_T0_X + 112 ) > 200 ||  COORDONNEES_Y_TIRE - (COORDONNEES_TIRE_T0_Y + 62 ) > 200 ) )
+{
+    TIRE_EXISTANT =  0;
+    COORDONNEES_Y_TIRE = -99999;
+    COORDONNEES_X_TIRE = -99999;
+}
+
 if ( etat_helico_tire == 1 && TIRE_EXISTANT ==  1)
                                         {
                                             COORDONNEES_Y_TIRE += 20;
@@ -485,29 +668,34 @@ if ( etat_helico_tire == 3 && TIRE_EXISTANT ==  1)
                                             COORDONNEES_X_TIRE -= 20;
                                         }
 
-if (TIRE_EXISTANT ==  1 && ( COORDONNEES_X_TIRE - COORDONNEES_ACTUELS_HELICO_X_ECRAN < (-200) || COORDONNEES_X_TIRE - (COORDONNEES_ACTUELS_HELICO_X_ECRAN + 112 ) > 200 ||  COORDONNEES_Y_TIRE - (COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 62 ) > 200 ) )
-{
-    TIRE_EXISTANT =  0;
-    COORDONNEES_Y_TIRE = -99999;
-    COORDONNEES_X_TIRE = -99999;
-}
+
+
+/*if ( ( carte [COORDONNEES_Y_TIRE + COORDONNEES_TIRE_T0_Y] [COORDONNEES_X_TIRE + COORDONNEES_TIRE_T0_X] > 1 ) && TIRE_EXISTANT ==  1 )
+    {
+        if (carte  [COORDONNEES_Y_TIRE + COORDONNEES_TIRE_T0_Y] [COORDONNEES_X_TIRE + COORDONNEES_TIRE_T0_X] == 2)
+            {
+                TIRE_EXISTANT =  0;
+                COORDONNEES_Y_TIRE = -99999;
+                COORDONNEES_X_TIRE = -99999;
+            }
+    }*/
  /*====================================================FIN Fonction TIRE=================================================================================================*/
 /*=======================================================VERIFICATION COLLISIONS=============================================================*/
-                            if (DECALAGE_SCROLL<0 || DEPLACMENT_HELICO_X<0) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
+                            if ( COORDONNEES_ACTUELS_HELICO_X  < 576) //limite le scroll et recadre la camera sur l'helico sur le bord gauche
                                 {
                                 if(touches[2] == 1)
                                     {
-                                        DECALAGE_SCROLL=11;
+                                        DECALAGE_SCROLL=0;
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X-12;
                                     }
                                 if(touches[3] == 1)
                                     {
-                                        DECALAGE_SCROLL=11;
+                                        DECALAGE_SCROLL=0;
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
                                     }
 
                                 }
-                            if (DECALAGE_SCROLL>(LARGEUR_FENETRE_TILE-20)*64 || DEPLACMENT_HELICO_X > 0)   //limite le scroll et recadre la camera sur l'helico sur le bord droit
+                            if (DECALAGE_SCROLL>(LARGEUR_FENETRE_TILE-20)*64 || COORDONNEES_ACTUELS_HELICO_X > (LARGEUR_FENETRE_TILE*64)-640)   //limite le scroll et recadre la camera sur l'helico sur le bord droit
                                 {
 
                                 if(touches[2] == 1)
@@ -520,16 +708,6 @@ if (TIRE_EXISTANT ==  1 && ( COORDONNEES_X_TIRE - COORDONNEES_ACTUELS_HELICO_X_E
                                         DECALAGE_SCROLL=(LARGEUR_FENETRE_TILE-20)*64;
                                         DEPLACMENT_HELICO_X=DEPLACMENT_HELICO_X+12;
                                     }
-                                }
-
-                            //limite l'hélico sur le bord gauche car l'hélico se déplace seulement de 640 pixels sur le bord droit
-                            if (DEPLACMENT_HELICO_Y < 0) //limite l'hélico sur le bord bas
-                                {
-                                    DEPLACMENT_HELICO_Y = 0;
-                                }
-                            if (DEPLACMENT_HELICO_Y > 640)//limite l'hélico sur le bord haut
-                                {
-                                    DEPLACMENT_HELICO_Y = 640;
                                 }
 /*=======================================================FIN VERIFICATION COLLISIONS=============================================================*/
 
@@ -548,21 +726,29 @@ if ( COORDONNEES_SOUCOUPE_X > COORDONNEES_ACTUELS_HELICO_X_ECRAN )
             COORDONNEES_SOUCOUPE_X -= 6;
         }
 
-if ( COORDONNEES_SOUCOUPE_Y < COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 4 )
+if ( COORDONNEES_SOUCOUPE_Y < COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 20 )
         {
             COORDONNEES_SOUCOUPE_Y += 6;
         }
 
-if ( COORDONNEES_SOUCOUPE_Y > COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 4 )
+if ( COORDONNEES_SOUCOUPE_Y > COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 20 )
         {
             COORDONNEES_SOUCOUPE_Y -= 6;
         }
 if ( ( COORDONNEES_SOUCOUPE_X<= COORDONNEES_X_TIRE && (COORDONNEES_SOUCOUPE_X + 113 ) >= COORDONNEES_X_TIRE ) && ( COORDONNEES_SOUCOUPE_Y<= COORDONNEES_Y_TIRE && (COORDONNEES_SOUCOUPE_Y + 62 ) >= COORDONNEES_Y_TIRE ) )
         {
-            COORDONNEES_EXPLOSION_SOUCOUPE_X = COORDONNEES_SOUCOUPE_X;
-            COORDONNEES_EXPLOSION_SOUCOUPE_Y = COORDONNEES_SOUCOUPE_Y;
+            COORDONNEES_EXPLOSION_X = COORDONNEES_SOUCOUPE_X + 20;
+            COORDONNEES_EXPLOSION_Y = COORDONNEES_SOUCOUPE_Y + 10;
             COORDONNEES_SOUCOUPE_X = -2000;
             EXPLOSION_SOUCOUPE = 1;
+        }
+
+if (COORDONNEES_SOUCOUPE_Y == (COORDONNEES_ACTUELS_HELICO_Y_ECRAN + 20) && (COORDONNEES_SOUCOUPE_X == COORDONNEES_ACTUELS_HELICO_X_ECRAN ) )
+        {
+          DECALAGE_SCROLL = 0;
+          DEPLACMENT_HELICO_X = 0;
+          DEPLACMENT_HELICO_Y = 0;
+          EXPLOSION_SOUCOUPE = 1;
         }
 if (EXPLOSION_SOUCOUPE > 0)
 {
@@ -716,8 +902,8 @@ if (EXPLOSION_SOUCOUPE > 0)
                             Rect_tire.y = COORDONNEES_Y_TIRE;
 
 
-                            Rect_explosion.x = COORDONNEES_EXPLOSION_SOUCOUPE_X;
-                            Rect_explosion.y = COORDONNEES_EXPLOSION_SOUCOUPE_Y;
+                            Rect_explosion.x = COORDONNEES_EXPLOSION_X;
+                            Rect_explosion.y = COORDONNEES_EXPLOSION_Y;
 
                             for(i=0;i<LARGEUR_FENETRE_TILE;i++)
                             {
@@ -764,7 +950,7 @@ if (EXPLOSION_SOUCOUPE > 0)
                         SDL_FreeSurface(back);
                         SDL_FreeSurface(sable);
                         SDL_FreeSurface(immeuble_bas_gauche);
-                        SDL_FreeSurface( immeuble_bas_droite);
+                        SDL_FreeSurface(immeuble_bas_droite);
                         SDL_FreeSurface(immeuble_milieu_bas_gauche);
                         SDL_FreeSurface(immeuble_milieu_bas_droite);
                         SDL_FreeSurface(immeuble_milieu_haut_gauche);
